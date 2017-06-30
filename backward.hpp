@@ -755,7 +755,8 @@ public:
 		trace.object_filename.assign(filename, funcname); // ok even if funcname is the ending \0 (then we assign entire string)
 
 		if (*funcname) { // if it's not end of string (e.g. from last frame ip==0)
-			char* funcname_end = funcname + 1;
+			funcname += 1;
+			char* funcname_end = funcname;
 			while (*funcname_end && *funcname_end != ')' && *funcname_end != '+') {
 				funcname_end += 1;
 			}
@@ -1683,7 +1684,7 @@ namespace ColorMode {
 
 class cfile_streambuf: public std::streambuf {
 public:
-	cfile_streambuf(FILE *sink): sink(sink) {}
+	cfile_streambuf(FILE *_sink): sink(_sink) {}
 	int_type underflow() { return traits_type::eof(); }
 	int_type overflow(int_type ch) {
 		if (traits_type::not_eof(ch) && fwrite(&ch, sizeof ch, 1, sink) == 1) {
